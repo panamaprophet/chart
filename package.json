@@ -1,0 +1,31 @@
+{
+  "name": "chart",
+  "version": "1.0.0",
+  "description": "react chart component with smooth lines support",
+  "main": "dist/index.js",
+  "module": "dist/index.modern.js",
+  "source": "src/index.tsx",
+  "repository": "https://github.com/panamaprophet/chart.git",
+  "author": "pp <pp@rawsound.ru>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "parcel build",
+    "watch": "parcel watch"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.41",
+    "@types/react-dom": "^17.0.14",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "eslint": "^8.11.0",
+    "parcel": "^2.3.2",
+    "postcss": "^8.0.0",
+    "postcss-modules": "^4.3.0",
+    "typescript": "^4.6.2"
+  }
+}
