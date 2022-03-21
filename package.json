@@ -2,7 +2,7 @@
   "name": "chart",
   "version": "1.0.0",
   "description": "react chart component with smooth lines support",
-  "main": "dist/index.js",
+  "browser": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
   "repository": "https://github.com/panamaprophet/chart.git",
@@ -11,7 +11,7 @@
   "private": true,
   "scripts": {
     "build": "parcel build",
-    "watch": "parcel watch"
+    "watch": "parcel"
   },
   "dependencies": {
     "react": "^17.0.2",
