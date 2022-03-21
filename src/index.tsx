@@ -12,10 +12,10 @@ interface Props {
   items: ChartDataItem[],
   width?: number,
   height?: number,
-  offset?: number,
+  lineWidth?: number,
 }
 
-export const Chart = ({ items, width = 600, height = 300, offset = 2 }: Props) => {
+export const Chart = ({ items, width = 600, height = 300, lineWidth = 2 }: Props) => {
     const canvas = useRef<HTMLCanvasElement|null>(null);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export const Chart = ({ items, width = 600, height = 300, offset = 2 }: Props) =
         const values = items.map(item => item.value);
         const max = values.reduce((m, i) => Math.max(m, i), values[0]);
         const step = canvas.current.width / values.length;
-        const verticalMultiplier = (canvas.current.height - offset) / max;
+        const verticalMultiplier = (canvas.current.height - lineWidth) / max;
         const coordinates = values.map<ChartCoordinate>((value, index) => [index * step, value * verticalMultiplier]);
 
         context.moveTo((coordinates[0][0]), coordinates[0][1]);
