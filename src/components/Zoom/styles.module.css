@@ -1,0 +1,14 @@
+.root {
+    position: relative;
+}
+
+.leftBound,
+.rightBound {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 16px;
+    background: #ccc;
+
+    user-select: none;
+}
