@@ -65,7 +65,21 @@ const App = () => {
         {"date":"2022-03-15T04:18:54.188Z","humidity":15,"temperature":30},
     ];
 
-    return <Chart items={mock.map(item => ({ label: item.date, value: item.temperature }))} />
+    const props = {
+        labels: {
+            x: mock.map(item => item.date),
+        },
+        lines: {
+            temperature: mock.map(item => item.temperature),
+            humidity: mock.map(item => item.humidity),
+        },
+        colors: {
+            temperature: 'green',
+            humidity: 'blue',
+        },
+    }
+
+    return <Chart {...props} />;
 }
 
 render(<App />, document.getElementById('root'));
