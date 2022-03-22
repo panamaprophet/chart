@@ -1,4 +1,5 @@
-export type ChartCoordinate = [x: number, y: number];
+
+import { ChartCoordinate } from "../../types/index";
 
 
 export const drawSmoothLine = (context: CanvasRenderingContext2D, coordinates: ChartCoordinate[], color: string) => {
@@ -44,11 +45,19 @@ export const drawPolyLine = (context: CanvasRenderingContext2D, coordinates: Cha
     context.stroke();
 };
 
-export const drawDots = (context: CanvasRenderingContext2D, coordinates: ChartCoordinate[], color: string) => {
-    for (let i = 0; i < coordinates.length; i ++) {
-        context.beginPath();
-        context.arc(coordinates[i][0], coordinates[i][1], 3, 0, 2 * Math.PI);
-        context.fillStyle = color;
-        context.fill();
+export const getDotAtCoordinates = (x: number, coordinates: Record<string, ChartCoordinate[]>) => {
+    const result: Record<string, number> = {};
+
+    for (let key in coordinates) {
+        const distance = (coordinates[key][1][0] - coordinates[key][0][0]) / 2;
+
+        for (let i = 0; i < coordinates[key].length; i++) {
+            if (Math.abs(coordinates[key][i][0] - x) < distance) {
+                result[key] = i;
+                break;
+            }
+        }
     }
+
+    return result;
 };

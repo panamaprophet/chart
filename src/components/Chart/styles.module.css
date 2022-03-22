@@ -1,5 +1,6 @@
 .root {
     background: #fff;
+    position: relative;
 }
 
 .canvas {
