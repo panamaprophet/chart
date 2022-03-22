@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { ChartCoordinate } from "../../types/index";
+import { createContext } from 'react';
+import { ChartCoordinate } from '../../types/index';
 
 
 interface ChartContextType {

@@ -1,7 +1,9 @@
 import { MouseEventHandler, useContext, useState } from 'react';
 import { ChartContext } from '../Chart/context';
-import { getDotAtCoordinates } from '../Chart/helpers';
+import { getDotAtCoordinates } from './helpers';
+
 import styles from './styles.module.css';
+
 
 export const Dots = () => {
     const { coordinates, values, colors, dpi } = useContext(ChartContext);

@@ -1,8 +1,4 @@
-export { Chart } from './components/Chart/index';
-export { Zoom } from './components/Zoom/index';
-export { Labels } from './components/Labels/index';
-export {
-    drawSmoothLine,
-    drawPolyLine,
-    getDotAtCoordinates,
-} from './components/Chart/helpers';
+export * from './components/Chart/index';
+export * from './components/Zoom/index';
+export * from './components/Labels/index';
+export * from './components/Dots/index';

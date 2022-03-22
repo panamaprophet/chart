@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Chart } from 'chart';
+import { Chart } from '../src';
 import { render } from 'react-dom';
 
 const App = () => {
