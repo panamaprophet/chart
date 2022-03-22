@@ -1,0 +1,12 @@
+.root {
+    position: relative;
+}
+
+.label {
+    position: absolute;
+
+    transform-origin: top left;
+    transform: rotate(90deg);
+
+    font-size: 0.2em;
+}
