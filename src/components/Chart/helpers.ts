@@ -61,3 +61,35 @@ export const getDotAtCoordinates = (x: number, coordinates: Record<string, Chart
 
     return result;
 };
+
+export const getValuesRange = (rangeBounds: number[], lines: {[k: string]: number[]}) => {
+    const result: {[k: string]: number[]} = {};
+
+    for (let key in lines) {
+        const boundStep = (lines[key].length / 100);
+
+        result[key] = lines[key].slice(
+            Math.round(rangeBounds[0] * boundStep),
+            Math.round(rangeBounds[1] * boundStep)
+        );
+    }
+
+    return result;
+};
+
+export const getCoordinates = (canvasWidth: number, canvasHeight: number, values: {[k: string]: number[]}) => {
+    const result: Record<string, ChartCoordinate[]> = {};
+
+    for (let key in values) {
+        const max = values[key].reduce((m, i) => Math.max(m, i), values[key][0]);
+        const step = canvasWidth / values[key].length;
+        const verticalMultiplier = canvasHeight / max;
+
+        result[key] = values[key].map<ChartCoordinate>((value, index) => [
+            index * step,
+            canvasHeight - value * verticalMultiplier
+        ]);
+    }
+
+    return result;
+}

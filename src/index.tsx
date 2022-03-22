@@ -4,5 +4,5 @@ export { Labels } from './components/Labels/index';
 export {
     drawSmoothLine,
     drawPolyLine,
-    drawDots,
+    getDotAtCoordinates,
 } from './components/Chart/helpers';

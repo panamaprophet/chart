@@ -19,7 +19,7 @@ export const Dots = () => {
                     style={{
                         top: `${coordinates[key][index][1] / 2}px`,
                         left: `${coordinates[key][index][0] / 2}px`,
-                        color: colors[key] || colors['default'],
+                        color: colors[key],
                     }}
                 >
                     {key}: {values[key][index]}
