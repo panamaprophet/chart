@@ -26,9 +26,10 @@ export const drawSmoothLine = (context: CanvasRenderingContext2D, coordinates: C
         );
     }
 
+    context.lineWidth = 2;
     context.strokeStyle = color;
     context.stroke();
-}
+};
 
 export const drawPolyLine = (context: CanvasRenderingContext2D, coordinates: ChartCoordinate[], color: string) => {
     context.beginPath();
@@ -38,6 +39,16 @@ export const drawPolyLine = (context: CanvasRenderingContext2D, coordinates: Cha
         context.lineTo(coordinates[i][0], coordinates[i][1]);
     }
 
+    context.lineWidth = 2;
     context.strokeStyle = color;
     context.stroke();
-}
+};
+
+export const drawDots = (context: CanvasRenderingContext2D, coordinates: ChartCoordinate[], color: string) => {
+    for (let i = 0; i < coordinates.length; i ++) {
+        context.beginPath();
+        context.arc(coordinates[i][0], coordinates[i][1], 3, 0, 2 * Math.PI);
+        context.fillStyle = color;
+        context.fill();
+    }
+};
