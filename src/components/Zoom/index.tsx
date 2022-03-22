@@ -67,9 +67,11 @@ export const Zoom = ({ onBoundsChange }: Props) => {
     }, [isMoving]);
 
     return (
-        <div className={styles.root} ref={containerRef}>
-            <div className={styles.leftBound} style={{ left: `${leftBoundPosition}%` }} onMouseDown={() => onDragStart('left')}>L</div>
-            <div className={styles.rightBound} style={{ left: `${rightBoundPosition}%` }} onMouseDown={() => onDragStart('right')}>R</div>
+        <div className={styles.root}>
+            <div className={styles.container} ref={containerRef}>
+                <div className={styles.leftBound} style={{ left: `${leftBoundPosition}%` }} onMouseDown={() => onDragStart('left')}></div>
+                <div className={styles.rightBound} style={{ left: `${rightBoundPosition}%` }} onMouseDown={() => onDragStart('right')}></div>
+            </div>
         </div>
     );
 };
