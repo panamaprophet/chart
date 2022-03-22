@@ -28,3 +28,9 @@
 
     user-select: none;
 }
+
+.area {
+    position: absolute;
+    background: #fef;
+    height: 100%;
+}
