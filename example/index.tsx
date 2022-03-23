@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Chart } from '../src';
 import { render } from 'react-dom';
 
@@ -72,27 +72,14 @@ const App = () => {
             humidity: mock.map(item => item.humidity),
         },
         colors: {
-            temperature: 'green',
-            humidity: 'blue',
+            temperature: '#A2FFAF',
+            humidity: '#1D85E0',
         },
     };
 
-    const [hasDots, setDotsVisibility] = useState(false);
-    const [hasLabels, setLabelsVisibility] = useState(false);
-
     return (
         <div>
-            <Chart lines={props.lines} colors={props.colors} showDots={hasDots} labels={hasLabels && props.labels} />
-            <div>
-                <label>
-                    <input type="checkbox" onChange={event => setDotsVisibility(event.target.checked)}/>
-                    show dots
-                </label>
-                <label>
-                    <input type="checkbox" onChange={event => setLabelsVisibility(event.target.checked)}/>
-                    show labels
-                </label>
-            </div>
+            <Chart lines={props.lines} colors={props.colors} labels={props.labels} />
         </div>
     );
 
