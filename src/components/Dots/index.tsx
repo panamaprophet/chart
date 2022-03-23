@@ -6,10 +6,10 @@ import styles from './styles.module.css';
 
 
 export const Dots = () => {
-    const { coordinates, values, colors, dpi } = useContext(ChartContext);
+    const { coordinates, values, colors, pixelRatio } = useContext(ChartContext);
     const [dots, setDots] = useState<[key: string, index: number][]>([]);
 
-    const showDots: MouseEventHandler = (event) => setDots(Object.entries(getDotAtCoordinates(event.clientX * dpi, coordinates)));
+    const showDots: MouseEventHandler = (event) => setDots(Object.entries(getDotAtCoordinates(event.clientX * pixelRatio, coordinates)));
     const hideDots: MouseEventHandler = () => setDots([]);
 
     return (

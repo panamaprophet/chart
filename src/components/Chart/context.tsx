@@ -6,11 +6,11 @@ interface ChartContextType {
     coordinates: Record<string, ChartCoordinate[]>,
     values: Record<string, number[]>,
     colors: Record<string, string>,
-    dpi: number,
+    pixelRatio: number,
 }
 
 export const ChartContext = createContext<ChartContextType>({
-    dpi: 1,
+    pixelRatio: 1,
     colors: {},
     coordinates: {},
     values: {},

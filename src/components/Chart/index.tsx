@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useMemo } from 'react';
 import { Dots } from '../Dots/index';
 import { Zoom } from '../Zoom/index';
 import { ChartContext } from './context';
-import { drawPolyLine, drawSmoothLine, getCoordinates, getValuesRange } from './helpers';
+import { drawPolyLine, drawSmoothLine, getCoordinates, getDevicePixelRatio, getValuesRange } from './helpers';
 import styles from './styles.module.css';
 
 
@@ -19,14 +19,13 @@ interface Props {
 
 export const Chart = (props: Props) => {
     const { lines, colors = {}, width = 600, height = 300, lineWidth = 2, smoothnessThreshold = 100 } = props;
+
     const [bounds, setBounds] = useState([0, 100]);
-    const [dpi, setDpi] = useState(1);
+    const pixelRatio = getDevicePixelRatio();
     const canvas = useRef<HTMLCanvasElement|null>(null);
 
-    useEffect(() => setDpi(window.devicePixelRatio), [dpi]);
-
-    const values = useMemo(() => getValuesRange(bounds, lines), [dpi, bounds]);
-    const coordinates = useMemo(() => getCoordinates(width * dpi, height * dpi - lineWidth, values), [dpi, values]);
+    const values = useMemo(() => getValuesRange(bounds, lines), [pixelRatio, bounds]);
+    const coordinates = useMemo(() => getCoordinates(width * pixelRatio, height * pixelRatio - lineWidth, values), [pixelRatio, values]);
 
     useEffect(() => {
         const context = canvas.current?.getContext('2d');
@@ -35,7 +34,8 @@ export const Chart = (props: Props) => {
             return;
         }
 
-        context.clearRect(0, 0, width * dpi, height * dpi);
+        context?.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
+
 
         for (let key in coordinates) {
             if (coordinates[key].length > smoothnessThreshold) {
@@ -47,13 +47,13 @@ export const Chart = (props: Props) => {
     }, [canvas.current, coordinates]);
 
     return (
-        <ChartContext.Provider value={{ dpi, values, coordinates, colors }}>
+        <ChartContext.Provider value={{ pixelRatio, values, coordinates, colors }}>
             <div className={styles.root} style={{ width: `${width}px`, minHeight: `${height}px` }}>
                 <canvas
                     className={styles.canvas}
                     ref={canvas}
-                    width={width * dpi}
-                    height={height * dpi}
+                    width={width * pixelRatio}
+                    height={height * pixelRatio}
                 />
                 <Dots />
                 <Zoom onBoundsChange={newBounds => setBounds(newBounds)} />

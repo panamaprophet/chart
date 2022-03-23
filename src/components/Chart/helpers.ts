@@ -83,3 +83,5 @@ export const getCoordinates = (canvasWidth: number, canvasHeight: number, values
 
     return result;
 }
+
+export const getDevicePixelRatio = () => window.devicePixelRatio;
