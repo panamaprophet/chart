@@ -1,9 +1,17 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
-import { Axis } from '../Axis/index';
-import { Dots } from '../Dots/index';
-import { Zoom } from '../Zoom/index';
+import { Axis } from '../Axis';
+import { Dots } from '../Dots';
+import { Zoom } from '../Zoom';
 import { ChartContext } from './context';
-import { drawPolyLine, drawSmoothLine, getCoordinates, getDevicePixelRatio, getMax, getValuesRange } from './helpers';
+import {
+    drawPolyLine,
+    drawSmoothLine,
+    getCoordinates,
+    getDevicePixelRatio,
+    getMax,
+    getValuesRange,
+} from './helpers';
+
 import styles from './styles.module.css';
 
 
@@ -19,7 +27,7 @@ interface Props {
 
 
 export const Chart = (props: Props) => {
-    const { lines, colors = {}, width = 600, height = 300, lineWidth = 2, smoothnessThreshold = 100 } = props;
+    const { lines, colors = {}, width = 600, height = 300, smoothnessThreshold = 100 } = props;
 
     const [bounds, setBounds] = useState([0, 100]);
     const pixelRatio = getDevicePixelRatio();
@@ -46,7 +54,7 @@ export const Chart = (props: Props) => {
 
         context?.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
 
-        for (let key in coordinates) {
+        for (const key in coordinates) {
             if (coordinates[key].length > smoothnessThreshold) {
                 drawPolyLine(context, coordinates[key], colors[key]);
             } else {
@@ -72,4 +80,4 @@ export const Chart = (props: Props) => {
             </div>
         </ChartContext.Provider>
     );
-}
+};

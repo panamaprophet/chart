@@ -1,6 +1,5 @@
 import { createContext } from 'react';
-import { ChartCoordinate } from '../../types/index';
-
+import { ChartCoordinate } from '../../types';
 
 interface ChartContextType {
     coordinates: Record<string, ChartCoordinate[]>,

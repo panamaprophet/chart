@@ -1,5 +1,7 @@
 import { getAxisYLabels, getLabelPosition } from './helpers';
+
 import styles from './styles.module.css';
+
 
 interface Props {
     min: number,

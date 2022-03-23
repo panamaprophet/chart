@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState, useContext } from 'react';
 import { ChartContext } from '../Chart/context';
 import { getPositionInBounds } from './helpers';
+
 import styles from './styles.module.css';
 
 

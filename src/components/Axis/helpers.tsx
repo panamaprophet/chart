@@ -11,7 +11,7 @@ export const getAxisYLabels = (min: number, max: number) => {
     }
 
     return result;
-}
+};
 
 export const getLabelPosition = (index: number, itemsCount: number) => ({
     bottom: (index / itemsCount) * 100 + '%',

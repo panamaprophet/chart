@@ -1,5 +1,4 @@
-
-import { ChartCoordinate } from '../../types/index';
+import { ChartCoordinate } from '../../types';
 
 
 export const drawSmoothLine = (context: CanvasRenderingContext2D, coordinates: ChartCoordinate[], color: string) => {
@@ -48,7 +47,7 @@ export const drawPolyLine = (context: CanvasRenderingContext2D, coordinates: Cha
 export const getValuesRange = (rangeBounds: number[], lines: {[k: string]: number[]}) => {
     const result: {[k: string]: number[]} = {};
 
-    for (let key in lines) {
+    for (const key in lines) {
         const boundStep = (lines[key].length / 100);
 
         result[key] = lines[key].slice(
@@ -64,19 +63,19 @@ export const getMax = (values: {[k: string]: number[]}) => {
     let max = 0;
     let multiplier = 1;
 
-    for (let key in values) {
+    for (const key in values) {
         max = Math.max(max, ...values[key]);
     }
 
     multiplier = Math.pow(10, (max.toString().length - 1));
 
     return Math.ceil(max / multiplier) * multiplier;
-}
+};
 
 export const getCoordinates = (canvasWidth: number, canvasHeight: number, max: number, values: {[k: string]: number[]}) => {
     const result: Record<string, ChartCoordinate[]> = {};
 
-    for (let key in values) {
+    for (const key in values) {
         const step = canvasWidth / values[key].length;
         const verticalMultiplier = canvasHeight / max;
 
@@ -87,6 +86,6 @@ export const getCoordinates = (canvasWidth: number, canvasHeight: number, max: n
     }
 
     return result;
-}
+};
 
 export const getDevicePixelRatio = () => window.devicePixelRatio;
