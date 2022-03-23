@@ -1,11 +1,13 @@
-export const getAxisYLabels = (min: number, max: number, count: number) => {
+export const getAxisYLabels = (min: number, max: number) => {
+    const multiplier = Math.pow(10, max.toString().length - 1) / 2;
     const result = [];
+
     let i = min;
 
     while (i < max) {
         result.push(i);
 
-        i += (max / count);
+        i += multiplier;
     }
 
     return result;

@@ -8,7 +8,7 @@ interface Props {
 
 
 export const Axis = ({ min = 0, max }: Props) => {
-    const labels = getAxisYLabels(min, max, 10);
+    const labels = getAxisYLabels(min, max);
 
     return (
         <div className={styles.root}>
