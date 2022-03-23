@@ -60,16 +60,21 @@ export const getValuesRange = (rangeBounds: number[], lines: {[k: string]: numbe
     return result;
 };
 
-export const getCoordinates = (canvasWidth: number, canvasHeight: number, values: {[k: string]: number[]}) => {
-    const result: Record<string, ChartCoordinate[]> = {};
-
+export const getMax = (values: {[k: string]: number[]}) => {
     let max = 0;
+    let multiplier = 1;
 
     for (let key in values) {
-        const valuesMax = values[key].reduce((m, i) => Math.max(m, i), values[key][0]);
-        
-        max = valuesMax > max ? valuesMax : max;
+        max = Math.max(max, ...values[key]);
     }
+
+    multiplier = Math.pow(10, (max.toString().length - 1));
+
+    return Math.ceil(max / multiplier) * multiplier;
+}
+
+export const getCoordinates = (canvasWidth: number, canvasHeight: number, max: number, values: {[k: string]: number[]}) => {
+    const result: Record<string, ChartCoordinate[]> = {};
 
     for (let key in values) {
         const step = canvasWidth / values[key].length;

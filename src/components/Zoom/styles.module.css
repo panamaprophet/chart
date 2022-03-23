@@ -4,11 +4,14 @@
 }
 
 .root {
+    width: 100%;
+    position: relative;
     height: var(--container-height);
     padding-right: var(--bound-width);
     box-sizing: border-box;
     border-radius: 2px;
-    background: #efe;
+    background: #efefef;
+    margin-top: 8px;
 }
 
 .container {
@@ -23,7 +26,7 @@
     top: 0;
     height: 100%;
     width: var(--bound-width);
-    background: #aca;
+    background: #777;
     border-radius: 2px;
 
     user-select: none;
@@ -31,6 +34,6 @@
 
 .area {
     position: absolute;
-    background: #fef;
+    background: #ccc;
     height: 100%;
 }

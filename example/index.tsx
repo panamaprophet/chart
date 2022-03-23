@@ -72,8 +72,8 @@ const App = () => {
             humidity: mock.map(item => item.humidity),
         },
         colors: {
-            temperature: '#A2FFAF',
-            humidity: '#1D85E0',
+            temperature: '#73A921',
+            humidity: '#487AFA',
         },
     };
 

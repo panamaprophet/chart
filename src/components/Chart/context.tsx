@@ -7,6 +7,7 @@ interface ChartContextType {
     values: Record<string, number[]>,
     colors: Record<string, string>,
     pixelRatio: number,
+    canvasOffset: { x: number, y: number },
 }
 
 export const ChartContext = createContext<ChartContextType>({
@@ -14,4 +15,5 @@ export const ChartContext = createContext<ChartContextType>({
     colors: {},
     coordinates: {},
     values: {},
+    canvasOffset: { x: 0, y: 0 },
 });

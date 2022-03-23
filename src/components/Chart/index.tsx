@@ -1,8 +1,9 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
+import { Axis } from '../Axis/index';
 import { Dots } from '../Dots/index';
 import { Zoom } from '../Zoom/index';
 import { ChartContext } from './context';
-import { drawPolyLine, drawSmoothLine, getCoordinates, getDevicePixelRatio, getValuesRange } from './helpers';
+import { drawPolyLine, drawSmoothLine, getCoordinates, getDevicePixelRatio, getMax, getValuesRange } from './helpers';
 import styles from './styles.module.css';
 
 
@@ -13,7 +14,7 @@ interface Props {
     height?: number,
     lineWidth?: number,
     colors?: Record<string, string>,
-    smoothnessThreshold: number,
+    smoothnessThreshold?: number,
 }
 
 
@@ -24,8 +25,17 @@ export const Chart = (props: Props) => {
     const pixelRatio = getDevicePixelRatio();
     const canvas = useRef<HTMLCanvasElement|null>(null);
 
-    const values = useMemo(() => getValuesRange(bounds, lines), [pixelRatio, bounds]);
-    const coordinates = useMemo(() => getCoordinates(width * pixelRatio, height * pixelRatio - lineWidth, values), [pixelRatio, values]);
+    const values = useMemo(() => getValuesRange(bounds, lines), [bounds]);
+    const maxValue = useMemo(() => getMax(values), [values]);
+    const coordinates = useMemo(() => getCoordinates(width * pixelRatio, height * pixelRatio, maxValue, values), [values]);
+    const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        const { x = 0, y = 0 } = canvas.current?.getBoundingClientRect() || canvasOffset;
+
+        setCanvasOffset({ x, y });
+    }, [canvas.current]);
+
 
     useEffect(() => {
         const context = canvas.current?.getContext('2d');
@@ -35,7 +45,6 @@ export const Chart = (props: Props) => {
         }
 
         context?.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
-
 
         for (let key in coordinates) {
             if (coordinates[key].length > smoothnessThreshold) {
@@ -47,16 +56,19 @@ export const Chart = (props: Props) => {
     }, [canvas.current, coordinates]);
 
     return (
-        <ChartContext.Provider value={{ pixelRatio, values, coordinates, colors }}>
-            <div className={styles.root} style={{ width: `${width}px`, minHeight: `${height}px` }}>
-                <canvas
-                    className={styles.canvas}
-                    ref={canvas}
-                    width={width * pixelRatio}
-                    height={height * pixelRatio}
-                />
-                <Dots />
-                <Zoom onBoundsChange={newBounds => setBounds(newBounds)} />
+        <ChartContext.Provider value={{ pixelRatio, values, coordinates, colors, canvasOffset }}>
+            <div className={styles.root}>
+                <Axis min={0} max={maxValue} />
+                <div className={styles.canvasContainer} style={{ width: `${width}px`, height: `${height}px` }}>
+                    <canvas
+                        className={styles.canvas}
+                        ref={canvas}
+                        width={width * pixelRatio}
+                        height={height * pixelRatio}
+                    />
+                    <Dots />
+                    <Zoom onBoundsChange={newBounds => setBounds(newBounds)} />
+                </div>
             </div>
         </ChartContext.Provider>
     );

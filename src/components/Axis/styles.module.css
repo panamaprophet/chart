@@ -1,0 +1,15 @@
+.root {
+    position: relative;
+    display: flex;
+    width: 48px;
+    margin-right: 4px;
+    border-right: 1px solid rgba(0,0,0,0.2);
+}
+
+.yLabel {
+    position: absolute;
+    right: 0;
+    font-size: 0.6em;
+    padding-right: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}

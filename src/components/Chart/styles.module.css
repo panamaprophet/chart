@@ -1,4 +1,9 @@
 .root {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.canvasContainer {
     background: #fff;
     position: relative;
 }

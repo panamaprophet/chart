@@ -1,4 +1,5 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useContext } from 'react';
+import { ChartContext } from '../Chart/context';
 import { getPositionInBounds } from './helpers';
 import styles from './styles.module.css';
 
@@ -13,6 +14,8 @@ interface Props {
 
 
 export const Zoom = ({ onBoundsChange }: Props) => {
+    const { canvasOffset } = useContext(ChartContext);
+
     const minPosition = 0;
     const maxPosition = 100;
 
@@ -41,7 +44,7 @@ export const Zoom = ({ onBoundsChange }: Props) => {
     useEffect(() => {
         const onMouseMove = (event: MouseEvent) => {
             const containerWidth = containerRef.current?.clientWidth || 0;
-            const relativePosition = event.clientX / (containerWidth / 100);
+            const relativePosition = (event.clientX - canvasOffset.x) / (containerWidth / 100);
 
             const position = targetBound === 'left'
                 ? getPositionInBounds(relativePosition, minPosition, bounds[1])
