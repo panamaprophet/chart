@@ -1,6 +1,5 @@
 export * from './components/Chart';
 export * from './components/Zoom';
-export * from './components/Labels';
 export * from './components/Dots';
 export * from './components/Axis';
 

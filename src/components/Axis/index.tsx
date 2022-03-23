@@ -1,21 +1,26 @@
-import { getAxisYLabels, getLabelPosition } from './helpers';
+import { getDistributedItems, getLabelPosition } from './helpers';
 
 import styles from './styles.module.css';
 
 
 interface Props {
-    min: number,
-    max: number,
+    labels: (string | number)[],
+    direction: 'vertical' | 'horizontal',
+    maxLabelsCount?: number,
 }
 
 
-export const Axis = ({ min = 0, max }: Props) => {
-    const labels = getAxisYLabels(min, max);
+export const Axis = ({ labels, direction, maxLabelsCount = 4 }: Props) => {
+    const renderItems = getDistributedItems(labels, maxLabelsCount);
+    const classList = [
+        styles.root,
+        styles[`root--type-${direction}`]
+    ].join(' ');
 
     return (
-        <div className={styles.root}>
-            {labels.map((label, index) => (
-                <div className={styles.yLabel} style={getLabelPosition(index, labels.length)} key={label}>
+        <div className={classList}>
+            {renderItems.map((label, index) => (
+                <div className={styles.yLabel} style={getLabelPosition(direction, index, renderItems.length)} key={label}>
                     {label}
                 </div>
             ))}

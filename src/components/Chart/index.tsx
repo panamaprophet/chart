@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
 import { Axis } from '../Axis';
+import { getAxisYLabels } from '../Axis/helpers';
 import { Dots } from '../Dots';
 import { Zoom } from '../Zoom';
 import { ChartContext } from './context';
@@ -27,7 +28,7 @@ interface Props {
 
 
 export const Chart = (props: Props) => {
-    const { lines, colors = {}, width = 600, height = 300, smoothnessThreshold = 100 } = props;
+    const { labels, lines, colors = {}, width = 600, height = 300, smoothnessThreshold = 100 } = props;
 
     const [bounds, setBounds] = useState([0, 100]);
     const pixelRatio = getDevicePixelRatio();
@@ -36,6 +37,7 @@ export const Chart = (props: Props) => {
     const values = useMemo(() => getValuesRange(bounds, lines), [bounds]);
     const maxValue = useMemo(() => getMax(values), [values]);
     const coordinates = useMemo(() => getCoordinates(width * pixelRatio, height * pixelRatio, maxValue, values), [values]);
+    const { labels: xLabels } = useMemo(() => getValuesRange(bounds, { labels }), [bounds]);
     const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -43,7 +45,6 @@ export const Chart = (props: Props) => {
 
         setCanvasOffset({ x, y });
     }, [canvas.current]);
-
 
     useEffect(() => {
         const context = canvas.current?.getContext('2d');
@@ -66,15 +67,11 @@ export const Chart = (props: Props) => {
     return (
         <ChartContext.Provider value={{ pixelRatio, values, coordinates, colors, canvasOffset }}>
             <div className={styles.root}>
-                <Axis min={0} max={maxValue} />
+                <Axis labels={getAxisYLabels(0, maxValue)} direction="vertical" />
                 <div className={styles.canvasContainer} style={{ width: `${width}px`, height: `${height}px` }}>
-                    <canvas
-                        className={styles.canvas}
-                        ref={canvas}
-                        width={width * pixelRatio}
-                        height={height * pixelRatio}
-                    />
+                    <canvas className={styles.canvas} ref={canvas} width={width * pixelRatio} height={height * pixelRatio} />
                     <Dots />
+                    <Axis labels={xLabels} direction="horizontal" />
                     <Zoom onBoundsChange={newBounds => setBounds(newBounds)} />
                 </div>
             </div>

@@ -44,8 +44,8 @@ export const drawPolyLine = (context: CanvasRenderingContext2D, coordinates: Cha
     context.stroke();
 };
 
-export const getValuesRange = (rangeBounds: number[], lines: {[k: string]: number[]}) => {
-    const result: {[k: string]: number[]} = {};
+export const getValuesRange = <T>(rangeBounds: number[], lines: {[k: string]: T[]}) => {
+    const result: {[k: string]: T[]} = {};
 
     for (const key in lines) {
         const boundStep = (lines[key].length / 100);
