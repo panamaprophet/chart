@@ -63,8 +63,15 @@ export const getValuesRange = (rangeBounds: number[], lines: {[k: string]: numbe
 export const getCoordinates = (canvasWidth: number, canvasHeight: number, values: {[k: string]: number[]}) => {
     const result: Record<string, ChartCoordinate[]> = {};
 
+    let max = 0;
+
     for (let key in values) {
-        const max = values[key].reduce((m, i) => Math.max(m, i), values[key][0]);
+        const valuesMax = values[key].reduce((m, i) => Math.max(m, i), values[key][0]);
+        
+        max = valuesMax > max ? valuesMax : max;
+    }
+
+    for (let key in values) {
         const step = canvasWidth / values[key].length;
         const verticalMultiplier = canvasHeight / max;
 
