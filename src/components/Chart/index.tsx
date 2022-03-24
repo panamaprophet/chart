@@ -36,13 +36,7 @@ export const Chart = (props: Props) => {
 
     const values = useMemo(() => getValuesRange(bounds, lines), [bounds]);
     const maxValue = useMemo(() => getMax(values), [values]);
-    const coordinates = useMemo(() => getCoordinates(
-        width * pixelRatio,
-        height * pixelRatio,
-        maxValue,
-        bounds,
-        values
-    ), [values]);
+    const coordinates = useMemo(() => getCoordinates(width * pixelRatio, height * pixelRatio, maxValue, values), [values]);
     const { labels: xLabels } = useMemo(() => getValuesRange(bounds, { labels }), [bounds]);
     const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
 

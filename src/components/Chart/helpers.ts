@@ -72,25 +72,19 @@ export const getMax = (values: { [k: string]: number[] }) => {
     return Math.ceil(max / multiplier) * multiplier;
 };
 
-// @todo: revisit it
 export const getCoordinates = (
     canvasWidth: number,
     canvasHeight: number,
     max: number,
-    bounds: number[],
     values: { [k: string]: number[] },
 ) => {
     const result: Record<string, ChartCoordinate[]> = {};
-
-    const percentBase = canvasWidth / 100;
-    const viewportWidth = canvasWidth - bounds[0] * percentBase - (canvasWidth - bounds[1] * percentBase);
-    const multiplier = canvasWidth / viewportWidth;
 
     for (const key in values) {
         const step = canvasWidth / values[key].length;
 
         result[key] = values[key].map<ChartCoordinate>((value, index) => [
-            step * index * multiplier,
+            step * index,
             canvasHeight - value * (canvasHeight / max)
         ]);
     }
