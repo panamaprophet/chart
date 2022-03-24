@@ -36,7 +36,13 @@ export const Chart = (props: Props) => {
 
     const values = useMemo(() => getValuesRange(bounds, lines), [bounds]);
     const maxValue = useMemo(() => getMax(values), [values]);
-    const coordinates = useMemo(() => getCoordinates(width * pixelRatio, height * pixelRatio, maxValue, values), [values]);
+    const coordinates = useMemo(() => getCoordinates(
+        width * pixelRatio,
+        height * pixelRatio,
+        maxValue,
+        bounds,
+        values
+    ), [values]);
     const { labels: xLabels } = useMemo(() => getValuesRange(bounds, { labels }), [bounds]);
     const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
 
@@ -65,16 +71,22 @@ export const Chart = (props: Props) => {
     }, [canvas.current, coordinates]);
 
     return (
-        <ChartContext.Provider value={{ pixelRatio, values, coordinates, colors, canvasOffset }}>
-            <div className={styles.root}>
-                <Axis labels={getAxisYLabels(0, maxValue)} direction="vertical" />
-                <div className={styles.canvasContainer} style={{ width: `${width}px`, height: `${height}px` }}>
-                    <canvas className={styles.canvas} ref={canvas} width={width * pixelRatio} height={height * pixelRatio} />
-                    <Dots />
+        <div className={styles.container}>
+            <ChartContext.Provider value={{ pixelRatio, values, coordinates, colors, canvasOffset }}>
+                <div className={styles.axisY}>
+                    <Axis labels={getAxisYLabels(0, maxValue)} direction="vertical" />
+                </div>
+                <div className={styles.axisX}>
                     <Axis labels={xLabels} direction="horizontal" />
+                </div>
+                <div className={styles.canvas}>
+                    <canvas ref={canvas} width={width * pixelRatio} height={height * pixelRatio} />
+                    <Dots />
+                </div>
+                <div className={styles.zoom}>
                     <Zoom onBoundsChange={newBounds => setBounds(newBounds)} />
                 </div>
-            </div>
-        </ChartContext.Provider>
+            </ChartContext.Provider>
+        </div>
     );
 };
