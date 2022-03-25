@@ -3,7 +3,7 @@ import { ChartCoordinate } from '../../types';
 
 export const drawSmoothLine = (context: CanvasRenderingContext2D, coordinates: ChartCoordinate[], color: string) => {
     context.beginPath();
-    context.moveTo(coordinates[0][0], coordinates[0][1]);
+    context.moveTo(...coordinates[0]);
 
     for (let i = 0; i < coordinates.length - 1; i ++) {
         const midX = (coordinates[i][0] + coordinates[i + 1][0]) / 2;
@@ -31,19 +31,6 @@ export const drawSmoothLine = (context: CanvasRenderingContext2D, coordinates: C
     context.stroke();
 };
 
-export const drawPolyLine = (context: CanvasRenderingContext2D, coordinates: ChartCoordinate[], color: string) => {
-    context.beginPath();
-    context.moveTo(coordinates[0][0], coordinates[0][1]);
-
-    for (let i = 1; i < coordinates.length; i ++) {
-        context.lineTo(coordinates[i][0], coordinates[i][1]);
-    }
-
-    context.lineWidth = 2;
-    context.strokeStyle = color;
-    context.stroke();
-};
-
 export const getValuesRange = <T>(rangeBounds: number[], lines: {[k: string]: T[]}) => {
     const result: {[k: string]: T[]} = {};
 
@@ -51,7 +38,7 @@ export const getValuesRange = <T>(rangeBounds: number[], lines: {[k: string]: T[
         const boundStep = (lines[key].length / 100);
 
         result[key] = lines[key].slice(
-            Math.ceil(rangeBounds[0] * boundStep),
+            Math.floor(rangeBounds[0] * boundStep),
             Math.floor(rangeBounds[1] * boundStep)
         );
     }
@@ -76,21 +63,20 @@ export const getCoordinates = (
     canvasWidth: number,
     canvasHeight: number,
     max: number,
-    bias: number,
     values: { [k: string]: number[] },
 ) => {
     const result: Record<string, ChartCoordinate[]> = {};
 
     for (const key in values) {
-        const step = canvasWidth / values[key].length;
+        const step = canvasWidth / (values[key].length - 1);
 
-        result[key] = values[key].map<ChartCoordinate>((value, index) => [
-            step * index * Math.abs(bias),
-            canvasHeight - value * (canvasHeight / max)
-        ]);
+        result[key] = values[key].map<ChartCoordinate>((value, index) => {
+            return [
+                step * index,
+                canvasHeight - value * (canvasHeight / max)
+            ];
+        });
     }
 
     return result;
 };
-
-export const getDevicePixelRatio = () => window.devicePixelRatio;

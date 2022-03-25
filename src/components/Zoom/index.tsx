@@ -1,5 +1,4 @@
-import { useRef, useEffect, useState, useContext } from 'react';
-import { ChartContext } from '../Chart/context';
+import { useRef, useEffect, useState } from 'react';
 import { getPositionInBounds } from './helpers';
 
 import styles from './styles.module.css';
@@ -15,16 +14,14 @@ interface Props {
 
 
 export const Zoom = ({ onBoundsChange }: Props) => {
-    const { canvasOffset } = useContext(ChartContext);
-
     const minPosition = 0;
     const maxPosition = 100;
 
     const [isMoving, setIsMoving] = useState(false);
     const [targetBound, setTargetBound] = useState<TargetBound>();
     const [bounds, setBounds] = useState([minPosition, maxPosition]);
+    const [leftBound, rightBound] = bounds;
     const containerRef = useRef<HTMLDivElement | null>(null);
-
 
     const onDragStart = (target: TargetBound) => {
         setIsMoving(true);
@@ -37,23 +34,24 @@ export const Zoom = ({ onBoundsChange }: Props) => {
         }
 
         return {
-            left: `${bounds[0]}%`,
-            right: `${maxPosition - bounds[1]}%`,
+            left: `${leftBound}%`,
+            right: `${maxPosition - rightBound}%`,
         };
     };
 
     useEffect(() => {
         const onMouseMove = (event: MouseEvent) => {
             const containerWidth = containerRef.current?.clientWidth || 0;
-            const relativePosition = (event.clientX - canvasOffset.x) / (containerWidth / 100);
+            const containerOffset = containerRef.current?.getBoundingClientRect() ?? { x: 0 };
+            const relativePosition = (event.clientX - containerOffset.x) / (containerWidth / 100);
 
             const position = targetBound === 'left'
-                ? getPositionInBounds(relativePosition, minPosition, bounds[1])
-                : getPositionInBounds(relativePosition, bounds[0], maxPosition);
+                ? getPositionInBounds(relativePosition, minPosition, rightBound)
+                : getPositionInBounds(relativePosition, leftBound, maxPosition);
 
             const newBounds: Bounds = targetBound === 'left'
-                ? [position, bounds[1]]
-                : [bounds[0], position];
+                ? [position, rightBound]
+                : [leftBound, position];
 
             setBounds(newBounds);
             onBoundsChange(newBounds);
@@ -76,8 +74,8 @@ export const Zoom = ({ onBoundsChange }: Props) => {
         <div className={styles.root}>
             <div className={styles.container} ref={containerRef}>
                 <div className={styles.area} style={getSelectedAreaStyles()}></div>
-                <div className={styles.leftBound} style={{ left: `${bounds[0]}%` }} onMouseDown={() => onDragStart('left')}></div>
-                <div className={styles.rightBound} style={{ left: `${bounds[1]}%` }} onMouseDown={() => onDragStart('right')}></div>
+                <div className={styles.leftBound} style={{ left: `${leftBound}%` }} onMouseDown={() => onDragStart('left')}></div>
+                <div className={styles.rightBound} style={{ left: `${rightBound}%` }} onMouseDown={() => onDragStart('right')}></div>
             </div>
         </div>
     );
