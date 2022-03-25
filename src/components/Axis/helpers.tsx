@@ -20,17 +20,3 @@ export const getLabelPosition = (
 ) => ({
     [direction === 'vertical' ? 'bottom' : 'left']: `${(index / itemsCount) * 100}%`,
 });
-
-export const getDistributedItems = <T,>(items: T[], n: number): T[] => {
-    const result = [];
-    const interval = Math.floor((items.length  - 2)/(n - 2));
-
-    for (let i = 1; i < n - 1; i++) {
-        result.push(items[i * interval]);
-    }
-
-    result.unshift(items[0]);
-    result.push(items[items.length - 1]);
-
-    return result;
-};

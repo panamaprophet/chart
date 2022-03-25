@@ -51,15 +51,15 @@ export const getValuesRange = <T>(rangeBounds: number[], lines: {[k: string]: T[
         const boundStep = (lines[key].length / 100);
 
         result[key] = lines[key].slice(
-            Math.round(rangeBounds[0] * boundStep),
-            Math.round(rangeBounds[1] * boundStep)
+            Math.ceil(rangeBounds[0] * boundStep),
+            Math.floor(rangeBounds[1] * boundStep)
         );
     }
 
     return result;
 };
 
-export const getMax = (values: { [k: string]: number[] }) => {
+export const getRoundMax = (values: { [k: string]: number[] }) => {
     let max = 0;
     let multiplier = 1;
 
@@ -76,6 +76,7 @@ export const getCoordinates = (
     canvasWidth: number,
     canvasHeight: number,
     max: number,
+    bias: number,
     values: { [k: string]: number[] },
 ) => {
     const result: Record<string, ChartCoordinate[]> = {};
@@ -84,7 +85,7 @@ export const getCoordinates = (
         const step = canvasWidth / values[key].length;
 
         result[key] = values[key].map<ChartCoordinate>((value, index) => [
-            step * index,
+            step * index * Math.abs(bias),
             canvasHeight - value * (canvasHeight / max)
         ]);
     }

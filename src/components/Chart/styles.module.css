@@ -1,11 +1,9 @@
-:root {
+.root {
     --canvas-width: 600px;
     --canvas-height: 300px;
     --axis-y-width: 50px;
     --grid-gap: 4px;
-}
 
-.container {
     display: grid;
 
     grid-template-rows: var(--canvas-height) 50px 50px 50px;

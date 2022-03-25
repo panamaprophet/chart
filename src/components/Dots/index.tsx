@@ -1,12 +1,19 @@
 import { MouseEventHandler, useContext, useState } from 'react';
+import { ChartCoordinate } from '../../types';
 import { ChartContext } from '../Chart/context';
 import { getDotAtCoordinates } from './helpers';
 
 import styles from './styles.module.css';
 
 
-export const Dots = () => {
-    const { coordinates, values, canvasOffset, colors, pixelRatio } = useContext(ChartContext);
+interface Props {
+    values: { [k: string]: (number | string)[] },
+    coordinates: { [k: string]: ChartCoordinate[] },
+}
+
+
+export const Dots = ({ values, coordinates }: Props) => {
+    const { canvasOffset, colors, pixelRatio } = useContext(ChartContext);
     const [dots, setDots] = useState<[key: string, index: number][]>([]);
 
     const showDots: MouseEventHandler = (event) => setDots(Object.entries(getDotAtCoordinates((event.clientX - canvasOffset.x) * pixelRatio, coordinates)));
