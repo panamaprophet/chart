@@ -9,28 +9,34 @@ import styles from './styles.module.css';
 
 
 interface Props {
-    lines: Record<string, number[]>,
-    labels: string[],
-    width?: number,
-    height?: number,
-    lineWidth?: number,
-    colors?: Record<string, string>,
+    lineNames: string[],
+    xLabels: string[],
+    colors: string[],
+    values: number[][],
+    canvas?: {
+        width: number,
+        height: number,
+        lineWidth: number,
+    },
 }
 
-
 export const Chart = (props: Props) => {
-    const { labels, lines, colors = {}, width = 600, height = 300 } = props;
+    const { width, height } = props.canvas ?? { width: 600, height: 300, lineWidth: 2 };
 
     const [bounds, setBounds] = useState([0, 100]);
     const pixelRatio = getDevicePixelRatio();
     const canvas = useRef<HTMLCanvasElement|null>(null);
 
-    const chartData = useMemo(() => getChartData(lines, labels, bounds, {
+    const chartData = useMemo(() => getChartData(props.values, props.xLabels, bounds, {
         width: width * pixelRatio,
         height: height * pixelRatio,
     }), [bounds]);
 
     const { coordinates, values, xLabels, yLabels } = chartData;
+
+    const formatLabel = (valueIndex: number, lineIndex: number) => {
+        return `${props.lineNames[lineIndex]}: ${values[lineIndex][valueIndex]}`;
+    };
 
     useEffect(() => {
         const context = canvas.current?.getContext('2d');
@@ -41,9 +47,7 @@ export const Chart = (props: Props) => {
 
         context?.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
 
-        for (const key in coordinates) {
-            drawSmoothLine(context, coordinates[key], colors[key]);
-        }
+        coordinates.forEach((line, lineIndex) => drawSmoothLine(context, line, props.colors[lineIndex]));
     }, [canvas.current, coordinates]);
 
     return (
@@ -56,7 +60,7 @@ export const Chart = (props: Props) => {
             </div>
             <div className={styles.canvas}>
                 <canvas ref={canvas} width={width * pixelRatio} height={height * pixelRatio} />
-                <Dots coordinates={coordinates} values={values} colors={colors} />
+                <Dots coordinates={coordinates} colors={props.colors} formatLabel={formatLabel} />
             </div>
             <div className={styles.zoom}>
                 <Zoom onBoundsChange={setBounds} />

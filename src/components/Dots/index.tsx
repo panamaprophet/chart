@@ -7,42 +7,43 @@ import styles from './styles.module.css';
 
 
 interface Props {
-    values: { [k: string]: (number | string)[] },
-    coordinates: { [k: string]: ChartCoordinate[] },
-    colors: { [k: string]: string },
+    coordinates: ChartCoordinate[][],
+    colors: string[],
+    formatLabel?: (value: number, lineIndex: number) => string,
 }
 
 
-export const Dots = ({ values, coordinates, colors }: Props) => {
-    const [dots, setDots] = useState<[key: string, index: number][]>([]);
+const formatDefault = (arg: number) => arg.toString();
+
+export const Dots = ({ coordinates, colors, formatLabel = formatDefault }: Props) => {
+    const [dots, setDots] = useState<(number | null)[]>([]);
     const ref = useRef<HTMLDivElement | null>(null);
     const pixelRatio = getDevicePixelRatio();
 
     const showDots: MouseEventHandler = (event) => {
         const offset = ref.current?.getBoundingClientRect() ?? { x: 0 };
+        const position = (event.clientX - offset.x) * pixelRatio;
 
-        setDots(Object.entries(getDotAtCoordinates((event.clientX - offset.x) * pixelRatio, coordinates)));
+        setDots(coordinates.map(line => getDotAtCoordinates(position, line)));
     };
 
     const hideDots: MouseEventHandler = () => setDots([]);
 
     return (
         <div className={styles.root} onMouseOut={hideDots} onMouseMove={showDots} ref={ref}>
-            {dots.map(([key, index]) => (
+            {dots.map((dotIndex, lineIndex) => dotIndex && (
                 <div
-                    key={key}
+                    key={lineIndex}
                     className={styles.dot}
                     style={{
-                        top: `${coordinates[key][index][1] / 2}px`,
-                        left: `${coordinates[key][index][0] / 2}px`,
-                        backgroundColor: colors[key],
+                        top: `${coordinates[lineIndex][dotIndex][1] / 2}px`,
+                        left: `${coordinates[lineIndex][dotIndex][0] / 2}px`,
+                        backgroundColor: colors[lineIndex],
                     }}
                 >
-                    <div className={styles.dotValue}>
-                        {key}: {values[key][index]}
-                    </div>
-                </div>))}
+                    <div className={styles.dotValue}>{formatLabel(dotIndex, lineIndex)}</div>
+                </div>
+            ))}
         </div>
     );
 };
-

@@ -40,13 +40,13 @@ export const getItemsInRange = <T>(rangeBounds: number[], items: T[]) => {
     );
 };
 
-export const getRoundMax = (values: { [k: string]: number[] }) => {
+export const getRoundMax = (lines: number[][]) => {
     let max = 0;
     let multiplier = 1;
 
-    for (const key in values) {
-        max = Math.max(max, ...values[key]);
-    }
+    lines.forEach(line => {
+        max = Math.max(max, ...line.slice());
+    });
 
     multiplier = 10 ** (max.toString().length - 1);
 
@@ -69,31 +69,31 @@ export const getAxisYLabels = (min: number, max: number) => {
 };
 
 export const getChartData = (
-    values: {[k: string]: number[]},
-    labels: string[],
+    lines: number[][],
+    xLabels: string[],
     bounds: number[],
     { width, height }: { width: number, height: number }
 ) => {
-    const max = getRoundMax(values);
+    const max = getRoundMax(lines);
     const viewport = (bounds[1] - bounds[0]) * width / 100;
     const bias = width / viewport;
     const offsetLeft = bounds[0] * width / 100;
 
-    const coordinates: Record<string, ChartCoordinate[]> = {};
+    const coordinates: ChartCoordinate[][] = [];
 
-    for (const key in values) {
-        const step = width / (values[key].length - 1);
+    lines.forEach((line, lineIndex) => {
+        const step = width / (line.length - 1);
 
-        coordinates[key] = values[key].map<ChartCoordinate>((value, index) => [
+        coordinates[lineIndex] = line.map<ChartCoordinate>((value, index) => [
             (step * index - offsetLeft) * bias,
             height - value * (height / max)
         ]);
-    }
+    });
 
     return {
-        xLabels: getItemsInRange(bounds, labels),
+        xLabels: getItemsInRange(bounds, xLabels),
         yLabels: getAxisYLabels(0, max),
         coordinates,
-        values,
+        values: lines,
     };
 };
