@@ -16,6 +16,7 @@ interface Props {
 export const Zoom = ({ onBoundsChange }: Props) => {
     const minPosition = 0;
     const maxPosition = 100;
+    const positionOffset = 3; // @todo: make it depend on bound handler width
 
     const [isMoving, setIsMoving] = useState(false);
     const [targetBound, setTargetBound] = useState<TargetBound>();
@@ -46,8 +47,8 @@ export const Zoom = ({ onBoundsChange }: Props) => {
             const relativePosition = (event.clientX - containerOffset.x) / (containerWidth / 100);
 
             const position = targetBound === 'left'
-                ? getPositionInBounds(relativePosition, minPosition, rightBound)
-                : getPositionInBounds(relativePosition, leftBound, maxPosition);
+                ? getPositionInBounds(relativePosition, minPosition, rightBound - positionOffset)
+                : getPositionInBounds(relativePosition, leftBound + positionOffset, maxPosition);
 
             const newBounds: Bounds = targetBound === 'left'
                 ? [position, rightBound]
