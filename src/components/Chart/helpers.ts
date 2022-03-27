@@ -31,19 +31,13 @@ export const drawSmoothLine = (context: CanvasRenderingContext2D, coordinates: C
     context.stroke();
 };
 
-export const getValuesRange = <T>(rangeBounds: number[], lines: {[k: string]: T[]}) => {
-    const result: {[k: string]: T[]} = {};
+export const getItemsInRange = <T>(rangeBounds: number[], items: T[]) => {
+    const boundStep = items.length / 100;
 
-    for (const key in lines) {
-        const boundStep = (lines[key].length / 100);
-
-        result[key] = lines[key].slice(
-            Math.floor(rangeBounds[0] * boundStep),
-            Math.floor(rangeBounds[1] * boundStep)
-        );
-    }
-
-    return result;
+    return items.slice(
+        rangeBounds[0] * boundStep,
+        rangeBounds[1] * boundStep
+    );
 };
 
 export const getRoundMax = (values: { [k: string]: number[] }) => {
@@ -54,29 +48,52 @@ export const getRoundMax = (values: { [k: string]: number[] }) => {
         max = Math.max(max, ...values[key]);
     }
 
-    multiplier = Math.pow(10, (max.toString().length - 1));
+    multiplier = 10 ** (max.toString().length - 1);
 
     return Math.ceil(max / multiplier) * multiplier;
 };
 
-export const getCoordinates = (
-    canvasWidth: number,
-    canvasHeight: number,
-    max: number,
-    values: { [k: string]: number[] },
-) => {
-    const result: Record<string, ChartCoordinate[]> = {};
+export const getAxisYLabels = (min: number, max: number) => {
+    const multiplier = Math.pow(10, max.toString().length - 1) / 2;
+    const result = [];
 
-    for (const key in values) {
-        const step = canvasWidth / (values[key].length - 1);
+    let i = min;
 
-        result[key] = values[key].map<ChartCoordinate>((value, index) => {
-            return [
-                step * index,
-                canvasHeight - value * (canvasHeight / max)
-            ];
-        });
+    while (i < max) {
+        result.push(i);
+
+        i += multiplier;
     }
 
     return result;
+};
+
+export const getChartData = (
+    values: {[k: string]: number[]},
+    labels: string[],
+    bounds: number[],
+    { width, height }: { width: number, height: number }
+) => {
+    const max = getRoundMax(values);
+    const viewport = (bounds[1] - bounds[0]) * width / 100;
+    const bias = width / viewport;
+    const offsetLeft = bounds[0] * width / 100;
+
+    const coordinates: Record<string, ChartCoordinate[]> = {};
+
+    for (const key in values) {
+        const step = width / (values[key].length - 1);
+
+        coordinates[key] = values[key].map<ChartCoordinate>((value, index) => [
+            (step * index - offsetLeft) * bias,
+            height - value * (height / max)
+        ]);
+    }
+
+    return {
+        xLabels: getItemsInRange(bounds, labels),
+        yLabels: getAxisYLabels(0, max),
+        coordinates,
+        values,
+    };
 };

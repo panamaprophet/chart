@@ -1,15 +1,9 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
 import { Axis } from '../Axis';
-import { getAxisYLabels } from '../Axis/helpers';
 import { Dots } from '../Dots';
 import { Zoom } from '../Zoom';
 import { getDevicePixelRatio } from '../../helpers';
-import {
-    drawSmoothLine,
-    getCoordinates,
-    getRoundMax,
-    getValuesRange,
-} from './helpers';
+import { drawSmoothLine, getChartData } from './helpers';
 
 import styles from './styles.module.css';
 
@@ -28,24 +22,15 @@ export const Chart = (props: Props) => {
     const { labels, lines, colors = {}, width = 600, height = 300 } = props;
 
     const [bounds, setBounds] = useState([0, 100]);
-    const [bias, setBias] = useState(1);
     const pixelRatio = getDevicePixelRatio();
     const canvas = useRef<HTMLCanvasElement|null>(null);
 
-    const values = useMemo(() => getValuesRange(bounds, lines), [bounds]);
-    const maxValue = useMemo(() => getRoundMax(values), [values]);
-    const coordinates = useMemo(() => getCoordinates(width * pixelRatio, height * pixelRatio, maxValue, values), [values]);
-    const { labels: xLabels } = useMemo(() => getValuesRange(bounds, { labels }), [bounds]);
-    const yLabels = getAxisYLabels(0, maxValue);
+    const chartData = useMemo(() => getChartData(lines, labels, bounds, {
+        width: width * pixelRatio,
+        height: height * pixelRatio,
+    }), [bounds]);
 
-    const onBoundsChange = (newBounds: number[]) => {
-        const percentBase = width / 100;
-        const viewportWidth = width - newBounds[0] * percentBase - (width - newBounds[1] * percentBase);
-        const newBias = (width / viewportWidth) * (newBounds[0] !== bounds[0] ? -1 : 1);
-
-        setBounds(newBounds);
-        setBias(newBias);
-    };
+    const { coordinates, values, xLabels, yLabels } = chartData;
 
     useEffect(() => {
         const context = canvas.current?.getContext('2d');
@@ -74,7 +59,7 @@ export const Chart = (props: Props) => {
                 <Dots coordinates={coordinates} values={values} colors={colors} />
             </div>
             <div className={styles.zoom}>
-                <Zoom onBoundsChange={onBoundsChange} />
+                <Zoom onBoundsChange={setBounds} />
             </div>
         </div>
     );
