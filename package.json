@@ -1,6 +1,6 @@
 {
-  "name": "chart",
-  "version": "1.0.0",
+  "name": "@evergreenstash/react-chart",
+  "version": "0.0.1",
   "description": "react chart component with smooth lines support",
   "browser": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -8,7 +8,6 @@
   "repository": "https://github.com/panamaprophet/chart.git",
   "author": "pp <pp@rawsound.ru>",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "build": "parcel build",
     "watch": "parcel",
