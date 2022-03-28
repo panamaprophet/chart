@@ -1,9 +1,7 @@
-:root {
+.root {
     --bound-width: 16px;
     --container-height: 48px;
-}
 
-.root {
     width: 100%;
     position: relative;
     height: var(--container-height);
