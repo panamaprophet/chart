@@ -1,16 +1,16 @@
-# react-chart
+# React-chart
 
 Hi, this is the Chart component.
 It takes some data and use it to plot few lines on a canvas.
 
 Add dependencies to your project, nothing special:
 
-`yarn add react-chart`
+`yarn add @evergreenstash/react-chart`
 
 And then just import and use it (or it's parts).
 
 ```js
-import { Chart } from 'react-chart';
+import { Chart } from '@evergreenstash/react-chart';
 
 ...
 
