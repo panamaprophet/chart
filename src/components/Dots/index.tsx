@@ -1,13 +1,12 @@
 import { MouseEventHandler, useRef, useState } from 'react';
 import { getDevicePixelRatio } from '../../helpers';
-import { ChartCoordinate } from '../../types';
 import { getDotAtCoordinates } from './helpers';
 
 import styles from './styles.module.css';
 
 
 interface Props {
-    coordinates: ChartCoordinate[][],
+    coordinates: [x: number, y: number][][],
     colors: string[],
     formatLabel?: (value: number, lineIndex: number) => string,
 }
@@ -31,7 +30,7 @@ export const Dots = ({ coordinates, colors, formatLabel = formatDefault }: Props
 
     return (
         <div className={styles.root} onMouseOut={hideDots} onMouseMove={showDots} ref={ref}>
-            {dots.map((dotIndex, lineIndex) => dotIndex && (
+            {dots.map((dotIndex, lineIndex) => (dotIndex !== null) && (
                 <div
                     key={lineIndex}
                     className={styles.dot}

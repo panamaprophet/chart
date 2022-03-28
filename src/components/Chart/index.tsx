@@ -1,9 +1,10 @@
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect } from 'react';
 import { Axis } from '../Axis';
 import { Dots } from '../Dots';
 import { Zoom } from '../Zoom';
 import { getDevicePixelRatio } from '../../helpers';
-import { drawSmoothLine, getChartData } from './helpers';
+import { drawSmoothLine } from './helpers';
+import { useChart } from '../../hooks/useChart';
 
 import styles from './styles.module.css';
 
@@ -20,43 +21,53 @@ interface Props {
     },
 }
 
+
 export const Chart = (props: Props) => {
-    const { width, height } = props.canvas ?? { width: 600, height: 300, lineWidth: 2 };
+    const defaultProps = { width: 600, height: 300, lineWidth: 2 };
+    const { width, height } = { ...defaultProps, ...(props.canvas || {}) };
 
-    const [bounds, setBounds] = useState([0, 100]);
     const pixelRatio = getDevicePixelRatio();
-    const canvas = useRef<HTMLCanvasElement|null>(null);
-
-    const chartData = useMemo(() => getChartData(props.values, props.xLabels, bounds, {
-        width: width * pixelRatio,
-        height: height * pixelRatio,
-    }), [bounds]);
-
-    const { coordinates, values, xLabels, yLabels } = chartData;
-
-    const formatLabel = (valueIndex: number, lineIndex: number) => {
-        return `${props.lineNames[lineIndex]}: ${values[lineIndex][valueIndex]}`;
-    };
+    const canvas = useRef<HTMLCanvasElement | null>(null);
+    const {
+        coordinates,
+        yLabels,
+        xLabels,
+        yLabelsCoordinates,
+        xLabelsCoordinates,
+        setBounds,
+    } = useChart(props.values, props.xLabels, { width, height });
 
     useEffect(() => {
         const context = canvas.current?.getContext('2d');
 
-        if (!context) {
+        if (!canvas.current || !context) {
             return;
         }
 
-        context?.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
-
+        context.clearRect(0, 0, canvas.current.width, canvas.current.height);
         coordinates.forEach((line, lineIndex) => drawSmoothLine(context, line, props.colors[lineIndex]));
-    }, [canvas.current, coordinates]);
+    }, [coordinates]);
+
+    // @todo: fix with adding startIndex or something like that
+    const formatLabel = (valueIndex: number, lineIndex: number) => {
+        return `${props.lineNames[lineIndex]}: ${props.values[lineIndex][valueIndex]}`;
+    };
 
     return (
         <div className={styles.root}>
             <div className={styles.axisY}>
-                <Axis labels={yLabels} direction="vertical" />
+                <Axis
+                    labels={yLabels}
+                    coordinates={yLabelsCoordinates}
+                    direction="vertical"
+                />
             </div>
             <div className={styles.axisX}>
-                <Axis labels={xLabels} direction="horizontal" />
+                <Axis
+                    labels={xLabels}
+                    coordinates={xLabelsCoordinates}
+                    direction="horizontal"
+                />
             </div>
             <div className={styles.canvas}>
                 <canvas ref={canvas} width={width * pixelRatio} height={height * pixelRatio} />

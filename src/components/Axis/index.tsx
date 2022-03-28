@@ -1,16 +1,14 @@
-import { getLabelPosition } from './helpers';
-
 import styles from './styles.module.css';
 
 
 interface Props {
     labels: (string | number)[],
     direction: 'vertical' | 'horizontal',
-    maxLabelsCount?: number,
+    coordinates: (number | string)[],
 }
 
 
-export const Axis = ({ labels, direction, maxLabelsCount = 4 }: Props) => {
+export const Axis = ({ labels, direction, coordinates }: Props) => {
     const classList = [
         styles.root,
         styles[`root--type-${direction}`]
@@ -18,8 +16,8 @@ export const Axis = ({ labels, direction, maxLabelsCount = 4 }: Props) => {
 
     return (
         <div className={classList}>
-            {labels.map((label, index) => (
-                <div className={styles.yLabel} style={getLabelPosition(direction, index, labels.length)} key={label}>
+            {labels.map((label, index) => ( // @todo: do not render elements outside of the viewport
+                <div className={styles.yLabel} style={{ [direction === 'horizontal' ? 'left' : 'bottom']: coordinates[index] }} key={label}>
                     {label}
                 </div>
             ))}
