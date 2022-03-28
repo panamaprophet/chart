@@ -91,6 +91,8 @@ export const useCoordinates = (values: number[][], { width, height }: CanvasSize
 export const useChart = (values: number[][], labels: string[], { width, height }: { width: number, height: number }) => {
     const pixelRatio = getDevicePixelRatio();
 
+    // console.time('useChart');
+
     const {
         setBounds,
         coordinates,
@@ -104,6 +106,8 @@ export const useChart = (values: number[][], labels: string[], { width, height }
 
     const xLabels = useMemo(() => labels.slice(startIndex, endIndex), [startIndex, endIndex]);
     const xLabelsCoordinates = useMemo(() => xLabels.map((_, index) => coordinates[0][index][0] / pixelRatio), [xLabels]);
+
+    // console.timeEnd('useChart');
 
     return {
         setBounds,

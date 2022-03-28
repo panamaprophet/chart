@@ -35,8 +35,8 @@ export const Dots = ({ coordinates, colors, formatLabel = formatDefault }: Props
                     key={lineIndex}
                     className={styles.dot}
                     style={{
-                        top: `${coordinates[lineIndex][dotIndex][1] / 2}px`,
-                        left: `${coordinates[lineIndex][dotIndex][0] / 2}px`,
+                        top: `${coordinates[lineIndex][dotIndex][1] / pixelRatio}px`,
+                        left: `${coordinates[lineIndex][dotIndex][0] / pixelRatio}px`,
                         backgroundColor: colors[lineIndex],
                     }}
                 >
