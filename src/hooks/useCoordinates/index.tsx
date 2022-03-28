@@ -3,13 +3,21 @@ import { CanvasSize, Bounds } from '../../types';
 import { getCoordinates } from './helpers';
 
 
-export const useCoordinates = (values: number[][], { width, height }: CanvasSize) => {
+export const useCoordinates = (values: number[][], canvasSize: CanvasSize) => {
     const [bounds, setBounds] = useState<Bounds>([0, 100]);
-    const chartData = useMemo(() => getCoordinates(values, bounds, { width, height }), [bounds]);
+    const {
+        coordinates,
+        startIndex,
+        endIndex,
+        max,
+    } = useMemo(() => getCoordinates(values, bounds, canvasSize), [bounds]);
 
     return {
         bounds,
         setBounds,
-        ...chartData,
+        coordinates,
+        startIndex,
+        endIndex,
+        max,
     };
 };

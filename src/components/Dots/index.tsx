@@ -1,12 +1,13 @@
 import { MouseEventHandler, useRef, useState } from 'react';
 import { getDevicePixelRatio } from '../../helpers';
 import { getDotAtCoordinates } from './helpers';
+import { Coordinate } from '../../types';
 
 import styles from './styles.module.css';
 
 
 interface Props {
-    coordinates: [x: number, y: number][][],
+    coordinates: Coordinate[][],
     colors: string[],
     formatLabel?: (value: number, lineIndex: number) => string,
 }

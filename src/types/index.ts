@@ -1,4 +1,4 @@
-export type ChartCoordinate = [
+export type Coordinate = [
     x: number,
     y: number
 ];

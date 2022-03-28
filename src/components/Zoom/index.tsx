@@ -1,12 +1,11 @@
 import { useRef, useEffect, useState } from 'react';
 import { getPositionInBounds } from './helpers';
+import { Bounds } from '../../types';
 
 import styles from './styles.module.css';
 
 
 type TargetBound = 'left' | 'right';
-
-type Bounds = [left: number, right: number];
 
 interface Props {
     onBoundsChange: (bounds: Bounds) => void,

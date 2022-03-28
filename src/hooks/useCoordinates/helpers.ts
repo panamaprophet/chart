@@ -1,3 +1,6 @@
+import { Bounds, CanvasSize } from "../../types";
+
+
 const getMax = (line: number[]) => {
     const max = Math.max(...line);
     const multiplier = 10 ** (max.toString().length - 1);
@@ -5,7 +8,7 @@ const getMax = (line: number[]) => {
     return Math.ceil(max / multiplier) * multiplier;
 };
 
-const getBias = (bounds: number[], canvasWidth: number) => {
+const getBias = (bounds: Bounds, canvasWidth: number) => {
     const [leftBound, rightBound] = bounds;
     const viewport = (rightBound - leftBound) * canvasWidth / 100;
 
@@ -16,7 +19,7 @@ const getStartIndex = (leftBound: number, itemsLength: number) => Math.floor(ite
 
 const getEndIndex = (rightBound: number, itemsLength: number) => Math.ceil(itemsLength / 100 * rightBound);
 
-const getViewport = ([leftBound, rightBound]: number[], lines: number[][], width: number) => ({
+const getViewport = ([leftBound, rightBound]: Bounds, lines: number[][], width: number) => ({
     startIndex: getStartIndex(leftBound, lines[0].length),
     endIndex: getEndIndex(rightBound, lines[0].length),
     bias: getBias([leftBound, rightBound], width),
@@ -25,9 +28,10 @@ const getViewport = ([leftBound, rightBound]: number[], lines: number[][], width
 
 export const getCoordinates = (
     lines: number[][],
-    bounds: [leftBound: number, rightBound: number],
-    { width, height }: { width: number, height: number }
+    bounds: Bounds,
+    canvasSize: CanvasSize
 ) => {
+    const { width, height } = canvasSize;
     const { bias, startIndex, endIndex } = getViewport(bounds, lines, width);
     const max = getMax([...lines.map(line => getMax(line.slice(startIndex, endIndex)))]);
     const offsetLeft = bounds[0] * width / 100;

@@ -1,7 +1,7 @@
-import { ChartCoordinate } from '../../types';
+import { Coordinate } from '../../types';
 
 
-export const drawSmoothLine = (context: CanvasRenderingContext2D, coordinates: ChartCoordinate[], color: string) => {
+export const drawSmoothLine = (context: CanvasRenderingContext2D, coordinates: Coordinate[], color: string) => {
     context.beginPath();
     context.moveTo(...coordinates[0]);
 

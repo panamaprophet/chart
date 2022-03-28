@@ -5,6 +5,7 @@ import { Zoom } from '../Zoom';
 import { getDevicePixelRatio } from '../../helpers';
 import { drawSmoothLine } from './helpers';
 import { useChart } from '../../hooks/useChart';
+import { CanvasSize } from '../../types';
 
 import styles from './styles.module.css';
 
@@ -14,11 +15,7 @@ interface Props {
     xLabels: string[],
     colors: string[],
     values: number[][],
-    canvas?: {
-        width: number,
-        height: number,
-        lineWidth: number,
-    },
+    canvas?: Partial<CanvasSize & { lineWidth: number }>,
 }
 
 
@@ -45,10 +42,8 @@ export const Chart = (props: Props) => {
             return;
         }
 
-        // console.time('canvas draw');
         context.clearRect(0, 0, canvas.current.width, canvas.current.height);
         coordinates.forEach((line, lineIndex) => drawSmoothLine(context, line, props.colors[lineIndex]));
-        // console.timeEnd('canvas draw');
     }, [coordinates]);
 
     const formatLabel = (valueIndex: number, lineIndex: number) => {
