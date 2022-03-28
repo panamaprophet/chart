@@ -29,12 +29,13 @@ export const Chart = (props: Props) => {
     const pixelRatio = getDevicePixelRatio();
     const canvas = useRef<HTMLCanvasElement | null>(null);
     const {
+        setBounds,
         coordinates,
+        startIndex,
         yLabels,
         xLabels,
         yLabelsCoordinates,
         xLabelsCoordinates,
-        setBounds,
     } = useChart(props.values, props.xLabels, { width, height });
 
     useEffect(() => {
@@ -48,9 +49,10 @@ export const Chart = (props: Props) => {
         coordinates.forEach((line, lineIndex) => drawSmoothLine(context, line, props.colors[lineIndex]));
     }, [coordinates]);
 
-    // @todo: fix with adding startIndex or something like that
     const formatLabel = (valueIndex: number, lineIndex: number) => {
-        return `${props.lineNames[lineIndex]}: ${props.values[lineIndex][valueIndex]}`;
+        const offset = startIndex > 0 ? startIndex - 1 : 0;
+
+        return `${props.lineNames[lineIndex]}: ${props.values[lineIndex][valueIndex + offset]}`;
     };
 
     return (

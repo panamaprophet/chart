@@ -107,11 +107,14 @@ export const useChart = (values: number[][], labels: string[], { width, height }
 
     return {
         setBounds,
+
         coordinates,
         startIndex,
         endIndex,
+
         yLabels,
         yLabelsCoordinates,
+
         xLabels,
         xLabelsCoordinates,
     };
