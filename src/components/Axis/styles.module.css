@@ -13,19 +13,22 @@
     border-right: 1px solid rgba(0,0,0,0.2);
 }
 
-.yLabel {
-    display: inline-flex;
+.label {
+    display: inline-block;
     position: absolute;
     font-size: 0.6em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.root--type-vertical .yLabel {
+.root--type-vertical .label {
     right: 0;
     padding: 0 4px 0 2px;
     border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 
-.root--type-horizontal .yLabel {
+.root--type-horizontal .label {
     border-bottom: none;
     border-left: 1px solid rgba(0,0,0,0.2);
     padding: 3px 0 0 4px;
