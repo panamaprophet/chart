@@ -14,21 +14,26 @@ import { Chart } from '@evergreenstash/react-chart';
 
 ...
 
-const props = {
-    lineNames: string[], // the line titles
-    xLabels: string[], // the x-axis labels
-    colors: string[], // the line colors
-    values: number[][], // the lines data
-    canvas: {
-        width: number,
-        height: number,
-        lineWidth: number,
-    }
-}
+const values = [
+    data.map(item => item.temperature),
+    data.map(item => item.humidity),
+];
+
+const dates = data.map(item => item.date);
 
 ...
 
-<Chart {...props} />
+<Chart values={values}>
+    <Line label="temperature" color="#73A921" />
+    <Line label="humidity" color="#487AFA" />
+
+    <AxisX labels={dates} />
+    <AxisY />
+
+    <Zoom />
+
+    <Tooltips />
+</Chart>
 ```
 
 Check the [`example`](example) folder for more details.

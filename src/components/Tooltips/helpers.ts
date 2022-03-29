@@ -1,7 +1,7 @@
 import { Coordinate } from '../../types/index';
 
 
-export const getDotAtCoordinates = (x: number, coordinates: Coordinate[]) => {
+export const getPointByCoordinates = (x: number, coordinates: Coordinate[]) => {
     const distance = coordinates[1][0] - coordinates[0][0];
 
     for (let i = 0; i < coordinates.length; i++) {

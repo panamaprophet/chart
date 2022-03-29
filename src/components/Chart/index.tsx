@@ -1,21 +1,18 @@
-import { useRef, useEffect } from 'react';
 import { Axis } from '../Axis';
-import { Dots } from '../Dots';
+import { Tooltips } from '../Tooltips';
 import { Zoom } from '../Zoom';
-import { getDevicePixelRatio } from '../../helpers';
-import { drawSmoothLine } from './helpers';
+import { Canvas } from '../Canvas';
 import { useChart } from '../../hooks/useChart';
+import { getSettings } from './settings';
 import { CanvasSize } from '../../types';
 
 import styles from './styles.module.css';
 
 
 interface Props {
-    lineNames: string[],
-    xLabels: string[],
-    colors: string[],
     values: number[][],
     canvas?: Partial<CanvasSize & { lineWidth: number }>,
+    children?: JSX.Element | JSX.Element[],
 }
 
 
@@ -23,58 +20,42 @@ export const Chart = (props: Props) => {
     const defaultProps = { width: 600, height: 300, lineWidth: 2 };
     const { width, height } = { ...defaultProps, ...(props.canvas || {}) };
 
-    const pixelRatio = getDevicePixelRatio();
-    const canvas = useRef<HTMLCanvasElement | null>(null);
+    const { lines, axisX, axisY, tooltips, zoom } = getSettings(props.children);
+
+    const colors = lines.map(line => line.color);
+    const lineNames = lines.map(line => line.label);
+
     const {
         setBounds,
         coordinates,
         startIndex,
-        yLabels,
-        xLabels,
-        yLabelsCoordinates,
-        xLabelsCoordinates,
-    } = useChart(props.values, props.xLabels, { width, height });
-
-    useEffect(() => {
-        const context = canvas.current?.getContext('2d');
-
-        if (!canvas.current || !context) {
-            return;
-        }
-
-        context.clearRect(0, 0, canvas.current.width, canvas.current.height);
-        coordinates.forEach((line, lineIndex) => drawSmoothLine(context, line, props.colors[lineIndex]));
-    }, [coordinates]);
+        yLabels, yLabelsCoordinates,
+        xLabels, xLabelsCoordinates,
+    } = useChart(props.values, axisX.labels ?? props.values[0].map((_, index) => index), { width, height });
 
     const formatLabel = (valueIndex: number, lineIndex: number) => {
         const offset = startIndex > 0 ? startIndex - 1 : 0;
+        const value = props.values[lineIndex][valueIndex + offset];
+        const line = lineNames[lineIndex];
 
-        return `${props.lineNames[lineIndex]}: ${props.values[lineIndex][valueIndex + offset]}`;
+        return tooltips.formatLabel(value, line);
     };
 
     return (
         <div className={styles.root}>
-            <div className={styles.axisY}>
-                <Axis
-                    labels={yLabels}
-                    coordinates={yLabelsCoordinates}
-                    direction="vertical"
-                />
-            </div>
-            <div className={styles.axisX}>
-                <Axis
-                    labels={xLabels}
-                    coordinates={xLabelsCoordinates}
-                    direction="horizontal"
-                />
-            </div>
+            {axisY && <div className={styles.axisY}>
+                <Axis labels={yLabels} coordinates={yLabelsCoordinates} direction="vertical" />
+            </div>}
+            {axisX && <div className={styles.axisX}>
+                <Axis labels={xLabels} coordinates={xLabelsCoordinates} direction="horizontal" />
+            </div>}
             <div className={styles.canvas}>
-                <canvas ref={canvas} width={width * pixelRatio} height={height * pixelRatio} />
-                <Dots coordinates={coordinates} colors={props.colors} formatLabel={formatLabel} />
+                <Canvas width={width} height={height} coordinates={coordinates} colors={colors} />
+                {tooltips && <Tooltips coordinates={coordinates} colors={colors} formatLabel={formatLabel} />}
             </div>
-            <div className={styles.zoom}>
+            {zoom && <div className={styles.zoom}>
                 <Zoom onBoundsChange={setBounds} />
-            </div>
+            </div>}
         </div>
     );
 };
