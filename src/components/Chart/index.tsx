@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Axis } from '../Axis';
 import { Tooltips } from '../Tooltips';
 import { Zoom } from '../Zoom';
@@ -19,7 +20,7 @@ interface Props {
 export const Chart = (props: Props) => {
     const defaultProps = { width: 600, height: 300, lineWidth: 2 };
     const { width, height } = { ...defaultProps, ...(props.canvas || {}) };
-    const { lines, axisX, axisY, tooltips, zoom } = getSettings(props.children);
+    const { lines, axisX, axisY, tooltips, zoom } = useMemo(() => getSettings(props.children), [props.children]);
     const labels = axisX?.labels || props.values[0].map((_, index) => index);
     const colors = lines.map(line => line.color);
     const lineNames = lines.map(line => line.label);
