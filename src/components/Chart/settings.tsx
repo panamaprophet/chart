@@ -1,4 +1,4 @@
-import { ReactElement, PureComponent, Children, JSXElementConstructor } from 'react';
+import { ReactElement, PureComponent, Children, JSXElementConstructor, ComponentProps } from 'react';
 
 
 export class Line extends PureComponent<{
@@ -20,41 +20,22 @@ export class Tooltips extends PureComponent<{
 
 
 export interface Settings {
-    lines: Array<{
-        color: string,
-        label: string,
-    }>,
-    axisX: {
-        labels: [],
-    } | null,
-    axisY: {
-        [k: string]: never,
-    } | null,
-    tooltips: {
-        formatLabel: (value: number, line: string) => string | number,
-    } | null,
-    zoom: {
-        [k: string]: never,
-    } | null,
+    lines: ComponentProps<typeof Line>[],
+    axisX: ComponentProps<typeof AxisX>,
+    axisY: ComponentProps<typeof AxisY>,
+    tooltips: ComponentProps<typeof Tooltips>,
+    zoom: ComponentProps<typeof Zoom>,
 }
 
-
-const getDefaultSettings = (): Settings => ({
-    lines: [],
-    axisX: null,
-    axisY: null,
-    tooltips: null,
-    zoom: null,
-});
 
 const isComponent = <T,>(Component: JSXElementConstructor<T>) => (child: ReactElement) => child.type === Component;
 
 const getProps = (element?: JSX.Element) => element?.props ?? null;
 
 
-export const getSettings = (children: JSX.Element | JSX.Element[] = []): Settings => {
+export const getSettings = (children: JSX.Element | JSX.Element[] = []): Partial<Settings> => {
     if (Children.count(children) === 0) {
-        return getDefaultSettings();
+        return {};
     }
 
     const settings = Children.toArray(children) as ReactElement[];
