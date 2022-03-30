@@ -6,8 +6,8 @@
 
     display: grid;
 
-    grid-template-rows: var(--canvas-height) 50px 50px 50px;
-    grid-template-columns: 50px var(--canvas-width);
+    grid-template-rows: var(--canvas-height) min-content min-content min-content;
+    grid-template-columns: min-content var(--canvas-width);
     grid-gap: var(--grid-gap);
 
     width: calc(var(--axis-y-width) + var(--canvas-width) + var(--grid-gap));
