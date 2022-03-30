@@ -11,6 +11,8 @@
     grid-gap: var(--grid-gap);
 
     width: calc(var(--axis-y-width) + var(--canvas-width) + var(--grid-gap));
+
+    font-family: sans-serif;
 }
 
 .axisY {

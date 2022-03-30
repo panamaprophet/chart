@@ -1,10 +1,8 @@
 export * from './components/Chart';
-export * from './components/Zoom';
-export * from './components/Dots';
-export * from './components/Axis';
+export * from './components/Chart/settings';
 
-export * from './components/Chart/helpers';
-export * from './components/Dots/helpers';
+export * from './components/Canvas/helpers';
+export * from './components/Tooltips/helpers';
 export * from './components/Zoom/helpers';
 
 export * from './helpers';

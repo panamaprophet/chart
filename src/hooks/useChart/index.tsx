@@ -5,7 +5,7 @@ import { getAxisYLabels } from './helpers';
 import { CanvasSize } from '../../types';
 
 
-export const useChart = (values: number[][], labels: string[], { width, height }: CanvasSize) => {
+export const useChart = (values: number[][], labels: (string | number)[], { width, height }: CanvasSize) => {
     const pixelRatio = getDevicePixelRatio();
 
     const {
