@@ -20,6 +20,7 @@ export const Chart = (props: Props) => {
     const defaultProps = { width: 600, height: 300, lineWidth: 2 };
     const { width, height } = { ...defaultProps, ...(props.canvas || {}) };
     const { lines, axisX, axisY, tooltips, zoom } = getSettings(props.children);
+    const labels = axisX?.labels || props.values[0].map((_, index) => index);
     const colors = lines.map(line => line.color);
     const lineNames = lines.map(line => line.label);
 
@@ -29,14 +30,16 @@ export const Chart = (props: Props) => {
         startIndex,
         yLabels, yLabelsCoordinates,
         xLabels, xLabelsCoordinates,
-    } = useChart(props.values, axisX.labels ?? props.values[0].map((_, index) => index), { width, height });
+    } = useChart(props.values, labels, { width, height });
 
     const formatLabel = (valueIndex: number, lineIndex: number) => {
         const offset = startIndex > 0 ? startIndex - 1 : 0;
         const value = props.values[lineIndex][valueIndex + offset];
         const line = lineNames[lineIndex];
 
-        return tooltips.formatLabel(value, line);
+        const fn = tooltips?.formatLabel;
+
+        return fn ? fn(value, line) : value;
     };
 
     return (
