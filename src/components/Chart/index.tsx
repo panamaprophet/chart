@@ -19,9 +19,7 @@ interface Props {
 export const Chart = (props: Props) => {
     const defaultProps = { width: 600, height: 300, lineWidth: 2 };
     const { width, height } = { ...defaultProps, ...(props.canvas || {}) };
-
     const { lines, axisX, axisY, tooltips, zoom } = getSettings(props.children);
-
     const colors = lines.map(line => line.color);
     const lineNames = lines.map(line => line.label);
 

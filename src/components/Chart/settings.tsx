@@ -27,22 +27,21 @@ export const getDefaultSettings = () => ({
     zoom: null,
 });
 
-// @todo: revisit
-export const getSettings = (children: JSX.Element|JSX.Element[] = []) => {
-    const settings = Children.toArray(children);
-
-    if (settings.length === 0) {
+export const getSettings = (children: JSX.Element | JSX.Element[] = []) => {
+    if (Children.count(children) === 0) {
         return getDefaultSettings();
     }
 
-    const lines = settings
-        .filter(child => (child as ReactElement).type === Line)
-        .map(line => (line as Line).props);
+    const settings = Children.toArray(children) as ReactElement[];
 
-    const axisX = (settings.find(child => (child as ReactElement).type === AxisX) as AxisX)?.props;
-    const axisY = (settings.find(child => (child as ReactElement).type === AxisY) as AxisY)?.props;
-    const tooltips = (settings.find(child => (child as ReactElement).type === Tooltips) as Tooltips)?.props;
-    const zoom = (settings.find(child => (child as ReactElement).type === Zoom) as Zoom)?.props;
+    const lines = settings
+        .filter(child => child.type === Line)
+        .map(line => line.props);
+
+    const axisX = settings.find(child => child.type === AxisX)?.props;
+    const axisY = settings.find(child => child.type === AxisY)?.props;
+    const tooltips = settings.find(child => child.type === Tooltips)?.props;
+    const zoom = settings.find(child => child.type === Zoom)?.props;
 
     return {
         lines,
