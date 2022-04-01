@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "watch": "../node_modules/.bin/parcel index.html"
+        "watch": "../node_modules/.bin/parcel --no-cache index.html"
     },
     "dependencies": {
         "@types/node": "link:../node_modules/@types/node",
