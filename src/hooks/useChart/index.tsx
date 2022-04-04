@@ -1,20 +1,18 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { getDevicePixelRatio } from '../../helpers';
-import { useCoordinates } from '../useCoordinates';
-import { getAxisYLabels } from './helpers';
-import { CanvasSize } from '../../types';
+import { getAxisYLabels, getCoordinates } from './helpers';
+import { Bounds, CanvasSize } from '../../types';
 
 
 export const useChart = (values: number[][], labels: (string | number)[], { width, height }: CanvasSize) => {
     const pixelRatio = getDevicePixelRatio();
-
+    const [bounds, setBounds] = useState<Bounds>([0, 100]);
     const {
-        setBounds,
         coordinates,
         startIndex,
         endIndex,
         max,
-    } = useCoordinates(values, { width: width * pixelRatio, height: height * pixelRatio });
+    } = useMemo(() => getCoordinates(values, bounds, { width: width * pixelRatio, height: height * pixelRatio }), [bounds]);
 
     const yLabels = useMemo(() => getAxisYLabels(0, max), [max]);
     const yLabelsCoordinates = useMemo(() => yLabels.map((_, index, items) => `${index * (width * pixelRatio / items.length)}px`), [yLabels]);
