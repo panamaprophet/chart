@@ -19,12 +19,6 @@ const getStartIndex = (leftBound: number, itemsLength: number) => Math.floor(ite
 
 const getEndIndex = (rightBound: number, itemsLength: number) => Math.ceil(itemsLength / 100 * rightBound);
 
-const getViewport = ([leftBound, rightBound]: Bounds, lines: number[][], width: number) => ({
-    startIndex: getStartIndex(leftBound, lines[0].length),
-    endIndex: getEndIndex(rightBound, lines[0].length),
-    bias: getBias([leftBound, rightBound], width),
-});
-
 
 export const getCoordinates = (
     lines: number[][],
@@ -32,9 +26,14 @@ export const getCoordinates = (
     canvasSize: CanvasSize
 ) => {
     const { width, height } = canvasSize;
-    const { bias, startIndex, endIndex } = getViewport(bounds, lines, width);
+    const [leftBound, rightBound] = bounds;
+
+    const startIndex = getStartIndex(leftBound, lines[0].length);
+    const endIndex = getEndIndex(rightBound, lines[0].length);
+    const bias = getBias(bounds, width);
+
     const max = getMax([...lines.map(line => getMax(line.slice(startIndex, endIndex)))]);
-    const offsetLeft = bounds[0] * width / 100;
+    const offsetLeft = leftBound * width / 100;
     const coordinates = new Array(lines.length);
 
     lines.forEach((line, lineIndex) => {
