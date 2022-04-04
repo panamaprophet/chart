@@ -1,6 +1,6 @@
 {
   "name": "@evergreenstash/react-chart",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "react chart component with smooth lines support",
   "browser": "dist/index.js",
   "module": "dist/index.modern.js",
