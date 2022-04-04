@@ -15,7 +15,7 @@ export const useChart = (values: number[][], labels: (string | number)[], { widt
     } = useMemo(() => getCoordinates(values, bounds, { width: width * pixelRatio, height: height * pixelRatio }), [bounds]);
 
     const yLabels = useMemo(() => getAxisYLabels(0, max), [max]);
-    const yLabelsCoordinates = useMemo(() => yLabels.map((_, index, items) => `${index * (width * pixelRatio / items.length)}px`), [yLabels]);
+    const yLabelsCoordinates = useMemo(() => yLabels.map((_, index, items) => `${index * (height / items.length)}px`), [yLabels]);
 
     const xLabels = useMemo(() => labels.slice(startIndex, endIndex), [startIndex, endIndex]);
     const xLabelsCoordinates = useMemo(() => xLabels.map((_, index) => `${coordinates[0][index][0] / pixelRatio}px`), [xLabels, coordinates]);

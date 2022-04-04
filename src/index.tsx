@@ -9,6 +9,3 @@ export * from './helpers';
 
 export * from './hooks/useChart';
 export * from './hooks/useChart/helpers';
-
-export * from './hooks/useCoordinates';
-export * from './hooks/useCoordinates/helpers';
